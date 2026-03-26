@@ -11,6 +11,7 @@ class Product(db.Model):
     size = db.Column(db.String(50))                       # 12oz Can, 20oz Bottle, 6-Pack, etc.
     price = db.Column(db.Float, nullable=False)
     in_stock = db.Column(db.Boolean, default=True)
+    image_url = db.Column(db.String(500), nullable=True)
 
     def to_dict(self):
         return {
@@ -20,6 +21,7 @@ class Product(db.Model):
             'size': self.size,
             'price': self.price,
             'in_stock': self.in_stock,
+            'image_url': self.image_url,
         }
 
 

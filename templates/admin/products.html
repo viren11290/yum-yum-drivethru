@@ -13,13 +13,20 @@
   <table class="table table-bordered table-hover align-middle">
     <thead class="table-danger">
       <tr>
-        <th>#</th><th>Name</th><th>Category</th><th>Size</th><th>Price</th><th>In Stock</th><th>Actions</th>
+        <th>#</th><th>Image</th><th>Name</th><th>Category</th><th>Size</th><th>Price</th><th>In Stock</th><th>Actions</th>
       </tr>
     </thead>
     <tbody>
       {% for p in products %}
       <tr>
         <td>{{ p.id }}</td>
+        <td>
+          {% if p.image_url %}
+            <img src="{{ p.image_url }}" alt="{{ p.name }}" style="width:50px;height:50px;object-fit:contain;">
+          {% else %}
+            <span class="text-muted small">No image</span>
+          {% endif %}
+        </td>
         <td class="fw-bold">{{ p.name }}</td>
         <td>{{ p.category }}</td>
         <td>{{ p.size }}</td>
@@ -73,6 +80,14 @@
                   <label class="form-label">Price ($)</label>
                   <input type="number" name="price" class="form-control" step="0.01" value="{{ p.price }}" required>
                 </div>
+                <div class="mb-3">
+                  <label class="form-label">Image URL (optional)</label>
+                  <input type="url" name="image_url" class="form-control"
+                    value="{{ p.image_url or '' }}" placeholder="https://...">
+                  {% if p.image_url %}
+                    <div class="mt-1"><img src="{{ p.image_url }}" style="height:60px;object-fit:contain;"></div>
+                  {% endif %}
+                </div>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" name="in_stock" id="stock{{ p.id }}"
                     {% if p.in_stock %}checked{% endif %}>
@@ -122,6 +137,11 @@
           <div class="mb-3">
             <label class="form-label">Price ($)</label>
             <input type="number" name="price" class="form-control" step="0.01" placeholder="1.99" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Image URL (optional)</label>
+            <input type="url" name="image_url" class="form-control" placeholder="https://...">
+            <div class="form-text">Paste a direct link to the product image (JPG, PNG, etc.)</div>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="in_stock" id="newStock" checked>

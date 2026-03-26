@@ -182,7 +182,8 @@ def admin_products_add():
         category=request.form.get('category'),
         size=request.form.get('size'),
         price=float(request.form.get('price', 0)),
-        in_stock=request.form.get('in_stock') == 'on'
+        in_stock=request.form.get('in_stock') == 'on',
+        image_url=request.form.get('image_url', '').strip() or None
     )
     db.session.add(product)
     db.session.commit()
@@ -199,6 +200,7 @@ def admin_products_edit(product_id):
     product.size = request.form.get('size')
     product.price = float(request.form.get('price', 0))
     product.in_stock = request.form.get('in_stock') == 'on'
+    product.image_url = request.form.get('image_url', '').strip() or None
     db.session.commit()
     flash('Product updated.', 'success')
     return redirect(url_for('admin_products'))
@@ -247,20 +249,53 @@ def seed_data():
         db.session.add(admin)
 
     seed_category('Pepsi Products', [
-        Product(name='Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
-        Product(name='Pepsi', category='Pepsi Products', size='20oz Bottle', price=2.25),
-        Product(name='Diet Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
-        Product(name='Mountain Dew', category='Pepsi Products', size='12oz Can', price=1.50),
-        Product(name='Mountain Dew', category='Pepsi Products', size='20oz Bottle', price=2.25),
-        Product(name='Gatorade', category='Pepsi Products', size='20oz Bottle', price=2.50),
+        Product(name='Pepsi', category='Pepsi Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/809/941/front_en.3.400.jpg'),
+        Product(name='Pepsi', category='Pepsi Products', size='20oz Bottle', price=2.25,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/001/488/front_en.3.400.jpg'),
+        Product(name='Pepsi', category='Pepsi Products', size='8-Pack 12oz Cans', price=6.99,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/204/128/front_en.3.400.jpg'),
+        Product(name='Pepsi', category='Pepsi Products', size='15-Pack 12oz Cans', price=11.99,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/230/875/front_en.3.400.jpg'),
+        Product(name='Pepsi', category='Pepsi Products', size='20-Pack 12oz Cans', price=14.99,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/106/040/front_en.3.400.jpg'),
+        Product(name='Diet Pepsi', category='Pepsi Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/001/312/front_en.3.400.jpg'),
+        Product(name='Mountain Dew', category='Pepsi Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/000/690/front_en.3.400.jpg'),
+        Product(name='Mountain Dew', category='Pepsi Products', size='20oz Bottle', price=2.25,
+                image_url='https://images.openfoodfacts.org/images/products/012/000/001/690/front_en.3.400.jpg'),
+        Product(name='Gatorade', category='Pepsi Products', size='20oz Bottle', price=2.50,
+                image_url='https://images.openfoodfacts.org/images/products/005/200/000/0003/front_en.3.400.jpg'),
     ])
 
     seed_category('Coca-Cola Products', [
-        Product(name='Coca-Cola', category='Coca-Cola Products', size='12oz Can', price=1.50),
-        Product(name='Coca-Cola', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
-        Product(name='Diet Coke', category='Coca-Cola Products', size='12oz Can', price=1.50),
-        Product(name='Sprite', category='Coca-Cola Products', size='12oz Can', price=1.50),
-        Product(name='Dr Pepper', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/028/904/front_en.3.400.jpg'),
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='20oz Bottle', price=2.25,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/000/443/front_en.3.400.jpg'),
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='12-Pack 12oz Cans', price=7.99,
+                image_url='https://target.scene7.com/is/image/Target/GUEST_56246e01-0094-49b0-95c8-417fa5dcb649?fmt=pjpeg&hei=300&wid=300'),
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='2L Bottle', price=3.49,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/050/103/front_en.3.400.jpg'),
+        Product(name='Coca-Cola Zero Sugar', category='Coca-Cola Products', size='20oz Bottle', price=2.25,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/040/869/front_en.3.400.jpg'),
+        Product(name='Coca-Cola Zero Sugar', category='Coca-Cola Products', size='24-Pack 12oz Cans', price=19.99,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/042/849/front_en.3.400.jpg'),
+        Product(name='Coca-Cola Zero Sugar', category='Coca-Cola Products', size='2L Bottle', price=3.49,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/050/141/front_en.3.400.jpg'),
+        Product(name='Diet Coke', category='Coca-Cola Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/028/911/front_en.3.400.jpg'),
+        Product(name='Diet Coke Caffeine Free', category='Coca-Cola Products', size='12-Pack 12oz Cans', price=7.99,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/029/345/front_en.3.400.jpg'),
+        Product(name='Diet Coke Cherry', category='Coca-Cola Products', size='12-Pack 12oz Cans', price=7.99,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/075/458/front_en.3.400.jpg'),
+        Product(name='Diet Coke Lime', category='Coca-Cola Products', size='12-Pack 12oz Cans', price=7.99,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/560/947/front_en.3.400.jpg'),
+        Product(name='Sprite', category='Coca-Cola Products', size='12oz Can', price=1.50,
+                image_url='https://images.openfoodfacts.org/images/products/049/000/028/942/front_en.3.400.jpg'),
+        Product(name='Dr Pepper', category='Coca-Cola Products', size='20oz Bottle', price=2.25,
+                image_url='https://images.openfoodfacts.org/images/products/078/000/000/752/front_en.3.400.jpg'),
     ])
 
     seed_category('Beer', [

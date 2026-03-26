@@ -39,6 +39,15 @@
   line-height: 1;
 }
 
+/* Product Images */
+.product-img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
 /* Navbar */
 .navbar-brand {
   letter-spacing: 0.5px;
