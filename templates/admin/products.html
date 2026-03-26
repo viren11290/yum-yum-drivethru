@@ -60,7 +60,7 @@
                 <div class="mb-3">
                   <label class="form-label">Category</label>
                   <select name="category" class="form-select" required>
-                    {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs'] %}
+                    {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs','Cigarettes','Vapes'] %}
                     <option value="{{ cat }}" {% if p.category == cat %}selected{% endif %}>{{ cat }}</option>
                     {% endfor %}
                   </select>
@@ -110,7 +110,7 @@
             <label class="form-label">Category</label>
             <select name="category" class="form-select" required>
               <option value="">-- Select --</option>
-              {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs'] %}
+              {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs','Cigarettes','Vapes'] %}
               <option value="{{ cat }}">{{ cat }}</option>
               {% endfor %}
             </select>

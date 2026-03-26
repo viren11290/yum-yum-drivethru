@@ -49,7 +49,7 @@ def index():
 
 @app.route('/menu')
 def menu():
-    categories = ['Pepsi Products', 'Coca-Cola Products', 'Beer', 'Packs']
+    categories = ['Pepsi Products', 'Coca-Cola Products', 'Beer', 'Packs', 'Cigarettes', 'Vapes']
     products_by_cat = {}
     for cat in categories:
         products_by_cat[cat] = Product.query.filter_by(category=cat, in_stock=True).all()
@@ -233,6 +233,12 @@ def admin_orders_status(order_id):
 
 # ── Startup ───────────────────────────────────────────────────────────────────
 
+def seed_category(category, products):
+    """Add products for a category only if that category doesn't exist yet."""
+    if Product.query.filter_by(category=category).count() == 0:
+        db.session.add_all(products)
+
+
 def seed_data():
     """Seed initial products and admin account."""
     if Admin.query.count() == 0:
@@ -240,39 +246,138 @@ def seed_data():
                       password_hash=generate_password_hash('yumyum2024'))
         db.session.add(admin)
 
-    if Product.query.count() == 0:
-        products = [
-            # Pepsi Products
-            Product(name='Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
-            Product(name='Pepsi', category='Pepsi Products', size='20oz Bottle', price=2.25),
-            Product(name='Diet Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
-            Product(name='Mountain Dew', category='Pepsi Products', size='12oz Can', price=1.50),
-            Product(name='Mountain Dew', category='Pepsi Products', size='20oz Bottle', price=2.25),
-            Product(name='Gatorade', category='Pepsi Products', size='20oz Bottle', price=2.50),
-            # Coca-Cola Products
-            Product(name='Coca-Cola', category='Coca-Cola Products', size='12oz Can', price=1.50),
-            Product(name='Coca-Cola', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
-            Product(name='Diet Coke', category='Coca-Cola Products', size='12oz Can', price=1.50),
-            Product(name='Sprite', category='Coca-Cola Products', size='12oz Can', price=1.50),
-            Product(name='Dr Pepper', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
-            # Beer
-            Product(name='Budweiser', category='Beer', size='12oz Can', price=2.00),
-            Product(name='Bud Light', category='Beer', size='12oz Can', price=2.00),
-            Product(name='Coors Light', category='Beer', size='12oz Can', price=2.00),
-            Product(name='Miller Lite', category='Beer', size='12oz Can', price=2.00),
-            Product(name='Corona', category='Beer', size='12oz Bottle', price=2.50),
-            # Packs
-            Product(name='Budweiser', category='Packs', size='6-Pack', price=9.99),
-            Product(name='Budweiser', category='Packs', size='12-Pack', price=17.99),
-            Product(name='Budweiser', category='Packs', size='24-Pack', price=29.99),
-            Product(name='Bud Light', category='Packs', size='6-Pack', price=9.99),
-            Product(name='Bud Light', category='Packs', size='12-Pack', price=17.99),
-            Product(name='Bud Light', category='Packs', size='24-Pack', price=29.99),
-            Product(name='Coors Light', category='Packs', size='6-Pack', price=9.99),
-            Product(name='Coors Light', category='Packs', size='12-Pack', price=17.99),
-            Product(name='Miller Lite', category='Packs', size='24-Pack', price=29.99),
-        ]
-        db.session.add_all(products)
+    seed_category('Pepsi Products', [
+        Product(name='Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
+        Product(name='Pepsi', category='Pepsi Products', size='20oz Bottle', price=2.25),
+        Product(name='Diet Pepsi', category='Pepsi Products', size='12oz Can', price=1.50),
+        Product(name='Mountain Dew', category='Pepsi Products', size='12oz Can', price=1.50),
+        Product(name='Mountain Dew', category='Pepsi Products', size='20oz Bottle', price=2.25),
+        Product(name='Gatorade', category='Pepsi Products', size='20oz Bottle', price=2.50),
+    ])
+
+    seed_category('Coca-Cola Products', [
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='12oz Can', price=1.50),
+        Product(name='Coca-Cola', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
+        Product(name='Diet Coke', category='Coca-Cola Products', size='12oz Can', price=1.50),
+        Product(name='Sprite', category='Coca-Cola Products', size='12oz Can', price=1.50),
+        Product(name='Dr Pepper', category='Coca-Cola Products', size='20oz Bottle', price=2.25),
+    ])
+
+    seed_category('Beer', [
+        Product(name='Budweiser', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Bud Light', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Coors Light', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Miller Lite', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Miller High Life', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Miller Genuine Draft', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Corona', category='Beer', size='12oz Bottle', price=2.50),
+        Product(name='Blue Moon', category='Beer', size='12oz Bottle', price=2.75),
+        Product(name='Angry Orchard', category='Beer', size='12oz Can', price=2.75),
+        Product(name='Victoria', category='Beer', size='12oz Can', price=2.50),
+        Product(name='Modelo Especial', category='Beer', size='12oz Can', price=2.50),
+        Product(name='Heineken', category='Beer', size='12oz Bottle', price=2.75),
+        Product(name='Rolling Rock', category='Beer', size='12oz Can', price=2.00),
+        Product(name='Yuengling', category='Beer', size='12oz Can', price=2.25),
+    ])
+
+    seed_category('Packs', [
+        Product(name='Budweiser', category='Packs', size='6-Pack', price=9.99),
+        Product(name='Budweiser', category='Packs', size='12-Pack', price=17.99),
+        Product(name='Budweiser', category='Packs', size='24-Pack', price=29.99),
+        Product(name='Bud Light', category='Packs', size='6-Pack', price=9.99),
+        Product(name='Bud Light', category='Packs', size='12-Pack', price=17.99),
+        Product(name='Bud Light', category='Packs', size='24-Pack', price=29.99),
+        Product(name='Coors Light', category='Packs', size='6-Pack', price=9.99),
+        Product(name='Coors Light', category='Packs', size='12-Pack', price=17.99),
+        Product(name='Miller Lite', category='Packs', size='6-Pack', price=9.99),
+        Product(name='Miller Lite', category='Packs', size='12-Pack', price=17.99),
+        Product(name='Miller Lite', category='Packs', size='24-Pack', price=29.99),
+        Product(name='Miller High Life', category='Packs', size='6-Pack', price=8.99),
+        Product(name='Miller High Life', category='Packs', size='12-Pack', price=15.99),
+        Product(name='Blue Moon', category='Packs', size='6-Pack', price=11.99),
+        Product(name='Blue Moon', category='Packs', size='12-Pack', price=19.99),
+        Product(name='Angry Orchard', category='Packs', size='6-Pack', price=10.99),
+        Product(name='Victoria', category='Packs', size='6-Pack', price=10.99),
+        Product(name='Victoria', category='Packs', size='12-Pack', price=18.99),
+        Product(name='Modelo Especial', category='Packs', size='6-Pack', price=10.99),
+        Product(name='Modelo Especial', category='Packs', size='12-Pack', price=18.99),
+        Product(name='Modelo Especial', category='Packs', size='24-Pack', price=32.99),
+        Product(name='Heineken', category='Packs', size='6-Pack', price=11.99),
+        Product(name='Heineken', category='Packs', size='12-Pack', price=19.99),
+        Product(name='Corona', category='Packs', size='6-Pack', price=10.99),
+        Product(name='Corona', category='Packs', size='12-Pack', price=18.99),
+        Product(name='Yuengling', category='Packs', size='6-Pack', price=9.99),
+        Product(name='Rolling Rock', category='Packs', size='12-Pack', price=14.99),
+    ])
+
+    seed_category('Cigarettes', [
+        # Camel
+        Product(name='Camel Blue', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Camel Turkish Silver', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Camel Turkish Gold', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Camel Menthol', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Camel Crush Menthol', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Camel 99s', category='Cigarettes', size='100s Box', price=9.99),
+        # Newport
+        Product(name='Newport', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Newport 100s', category='Cigarettes', size='100s Box', price=10.99),
+        Product(name='Newport Non-Menthol', category='Cigarettes', size='King Box', price=10.49),
+        # Marlboro
+        Product(name='Marlboro Red', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Marlboro Gold', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Marlboro Silver', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Marlboro Menthol', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Marlboro Black', category='Cigarettes', size='King Box', price=10.49),
+        Product(name='Marlboro 100s', category='Cigarettes', size='100s Box', price=10.99),
+        # Budget / Value Brands
+        Product(name='24/7 Regular', category='Cigarettes', size='King Box', price=6.99),
+        Product(name='24/7 Menthol', category='Cigarettes', size='King Box', price=6.99),
+        Product(name='24/7 Lights', category='Cigarettes', size='King Box', price=6.99),
+        Product(name='305s Regular', category='Cigarettes', size='King Box', price=5.99),
+        Product(name='305s Menthol', category='Cigarettes', size='King Box', price=5.99),
+        Product(name='305s Lights', category='Cigarettes', size='King Box', price=5.99),
+        Product(name='Pall Mall Red', category='Cigarettes', size='King Box', price=7.49),
+        Product(name='Pall Mall Blue', category='Cigarettes', size='King Box', price=7.49),
+        Product(name='Pall Mall Menthol', category='Cigarettes', size='King Box', price=7.49),
+        Product(name='Pyramid Regular', category='Cigarettes', size='King Box', price=6.49),
+        Product(name='Pyramid Menthol', category='Cigarettes', size='King Box', price=6.49),
+        # Other Brands
+        Product(name='Winston Red', category='Cigarettes', size='King Box', price=8.99),
+        Product(name='Winston Blue', category='Cigarettes', size='King Box', price=8.99),
+        Product(name='Kool Menthol', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='Salem Menthol', category='Cigarettes', size='King Box', price=9.49),
+        Product(name='L&M Red', category='Cigarettes', size='King Box', price=7.99),
+        Product(name='L&M Blue', category='Cigarettes', size='King Box', price=7.99),
+        Product(name='American Spirit Yellow', category='Cigarettes', size='King Box', price=12.99),
+        Product(name='American Spirit Blue', category='Cigarettes', size='King Box', price=12.99),
+        Product(name='American Spirit Organic', category='Cigarettes', size='King Box', price=13.99),
+    ])
+
+    seed_category('Vapes', [
+        # Breeze
+        Product(name='Breeze Pro', category='Vapes', size='2000 Puffs', price=14.99),
+        Product(name='Breeze Plus', category='Vapes', size='800 Puffs', price=9.99),
+        Product(name='Breeze Prime', category='Vapes', size='6000 Puffs', price=19.99),
+        # Elf Bar
+        Product(name='Elf Bar BC5000', category='Vapes', size='5000 Puffs', price=16.99),
+        Product(name='Elf Bar 600', category='Vapes', size='600 Puffs', price=8.99),
+        # Lost Mary
+        Product(name='Lost Mary OS5000', category='Vapes', size='5000 Puffs', price=16.99),
+        Product(name='Lost Mary BM600', category='Vapes', size='600 Puffs', price=8.99),
+        # Hyde
+        Product(name='Hyde Edge', category='Vapes', size='3300 Puffs', price=14.99),
+        Product(name='Hyde Rebel Pro', category='Vapes', size='5000 Puffs', price=17.99),
+        # Vuse
+        Product(name='Vuse Alto', category='Vapes', size='Device + Pod', price=12.99),
+        Product(name='Vuse Alto Pod', category='Vapes', size='2-Pack', price=10.99),
+        # Funky Republic
+        Product(name='Funky Republic Ti7000', category='Vapes', size='7000 Puffs', price=18.99),
+        # Puff Bar
+        Product(name='Puff Bar', category='Vapes', size='300 Puffs', price=7.99),
+        Product(name='Puff Bar Plus', category='Vapes', size='800 Puffs', price=10.99),
+        # Blu
+        Product(name='Blu Disposable', category='Vapes', size='400 Puffs', price=8.99),
+    ])
 
     db.session.commit()
 
