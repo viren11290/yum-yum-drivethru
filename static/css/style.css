@@ -1,0 +1,50 @@
+/* Hero Banner */
+.hero-banner {
+  background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+  padding: 80px 40px;
+}
+
+/* Category Cards */
+.category-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+}
+.category-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto;
+}
+
+/* Product Cards */
+.product-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+}
+.product-emoji {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+/* Navbar */
+.navbar-brand {
+  letter-spacing: 0.5px;
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+}

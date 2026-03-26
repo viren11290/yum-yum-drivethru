@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Place Order — Yum Yum Drive Through{% endblock %}
+
+{% block content %}
+<h1 class="fw-bold mb-4"><i class="bi bi-bag-check text-danger"></i> Place Your Order</h1>
+
+<div class="row g-4">
+  <!-- Order Summary -->
+  <div class="col-md-5 order-md-2">
+    <div class="card shadow-sm">
+      <div class="card-header bg-danger text-white fw-bold">Order Summary</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          {% for item in cart %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ item.name }} ({{ item.size }}) x{{ item.qty }}</span>
+            <span>${{ '%.2f'|format(item.price * item.qty) }}</span>
+          </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between fw-bold text-danger">
+            <span>Total</span>
+            <span>${{ '%.2f'|format(total) }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Form -->
+  <div class="col-md-7 order-md-1">
+    <div class="card shadow-sm">
+      <div class="card-header bg-danger text-white fw-bold">Your Details</div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Full Name</label>
+            <input type="text" name="name" class="form-control" placeholder="John Smith" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Phone Number</label>
+            <input type="tel" name="phone" class="form-control" placeholder="555-123-4567" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-bold">Preferred Pickup Time</label>
+            <input type="text" name="pickup_time" class="form-control" placeholder="e.g. 3:30 PM">
+          </div>
+          <button type="submit" class="btn btn-danger w-100 fw-bold btn-lg">
+            <i class="bi bi-check-circle me-2"></i>Confirm Order
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

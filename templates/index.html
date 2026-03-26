@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Yum Yum Drive Through — Home{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="hero-banner text-white rounded-4 mb-5 p-5 text-center">
+  <h1 class="display-4 fw-bold">Welcome to Yum Yum Drive Through</h1>
+  <p class="lead">Your one-stop shop for cold drinks, beers & packs — drive up and grab your favorites!</p>
+  <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg fw-bold mt-2">
+    <i class="bi bi-grid-fill me-2"></i>Browse Menu
+  </a>
+</div>
+
+<!-- Categories -->
+<h2 class="fw-bold mb-4">Shop by Category</h2>
+<div class="row g-4 mb-5">
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('menu') }}#pepsi" class="text-decoration-none">
+      <div class="card category-card text-center shadow-sm h-100">
+        <div class="card-body py-4">
+          <div class="category-icon bg-primary text-white">🥤</div>
+          <h5 class="card-title mt-3 text-dark">Pepsi Products</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('menu') }}#cola" class="text-decoration-none">
+      <div class="card category-card text-center shadow-sm h-100">
+        <div class="card-body py-4">
+          <div class="category-icon bg-danger text-white">🥤</div>
+          <h5 class="card-title mt-3 text-dark">Coca-Cola Products</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('menu') }}#beer" class="text-decoration-none">
+      <div class="card category-card text-center shadow-sm h-100">
+        <div class="card-body py-4">
+          <div class="category-icon bg-warning text-dark">🍺</div>
+          <h5 class="card-title mt-3 text-dark">Beer</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('menu') }}#packs" class="text-decoration-none">
+      <div class="card category-card text-center shadow-sm h-100">
+        <div class="card-body py-4">
+          <div class="category-icon bg-success text-white">📦</div>
+          <h5 class="card-title mt-3 text-dark">Packs (6 / 12 / 24)</h5>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Featured Products -->
+{% if featured %}
+<h2 class="fw-bold mb-4">Featured Products</h2>
+<div class="row g-4">
+  {% for product in featured %}
+  <div class="col-6 col-md-3">
+    <div class="card product-card shadow-sm h-100">
+      <div class="card-body text-center">
+        <div class="product-emoji">
+          {% if product.category == 'Beer' or product.category == 'Packs' %}🍺
+          {% elif product.category == 'Pepsi Products' %}🥤
+          {% else %}🥤{% endif %}
+        </div>
+        <h6 class="card-title fw-bold mt-2">{{ product.name }}</h6>
+        <p class="text-muted small mb-1">{{ product.size }}</p>
+        <p class="text-danger fw-bold fs-5">${{ '%.2f'|format(product.price) }}</p>
+        <form action="{{ url_for('cart_add') }}" method="post">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <input type="hidden" name="qty" value="1">
+          <button class="btn btn-danger btn-sm w-100">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

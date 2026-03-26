@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed — Yum Yum Drive Through{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+  <div style="font-size:5rem;">✅</div>
+  <h1 class="fw-bold text-success mt-3">Order Confirmed!</h1>
+  <p class="lead text-muted">Thank you, <strong>{{ order.customer_name }}</strong>! Your order has been received.</p>
+
+  <div class="card shadow-sm mx-auto mt-4" style="max-width:500px;">
+    <div class="card-header bg-success text-white fw-bold">Order #{{ order.id }}</div>
+    <div class="card-body text-start">
+      <p><strong>Phone:</strong> {{ order.phone }}</p>
+      {% if order.pickup_time %}
+      <p><strong>Pickup Time:</strong> {{ order.pickup_time }}</p>
+      {% endif %}
+      <hr>
+      <ul class="list-group list-group-flush">
+        {% for item in items %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ item.name }} ({{ item.size }}) x{{ item.qty }}</span>
+          <span>${{ '%.2f'|format(item.price * item.qty) }}</span>
+        </li>
+        {% endfor %}
+        <li class="list-group-item d-flex justify-content-between fw-bold text-danger">
+          <span>Total</span>
+          <span>${{ '%.2f'|format(order.total) }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <a href="{{ url_for('menu') }}" class="btn btn-danger mt-4 fw-bold">
+    <i class="bi bi-arrow-left me-2"></i>Back to Menu
+  </a>
+</div>
+{% endblock %}

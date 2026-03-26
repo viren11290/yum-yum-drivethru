@@ -1,0 +1,139 @@
+{% extends 'admin/base.html' %}
+{% block title %}Products — Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">Products</h2>
+  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addModal">
+    <i class="bi bi-plus-circle me-1"></i> Add Product
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover align-middle">
+    <thead class="table-danger">
+      <tr>
+        <th>#</th><th>Name</th><th>Category</th><th>Size</th><th>Price</th><th>In Stock</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td class="fw-bold">{{ p.name }}</td>
+        <td>{{ p.category }}</td>
+        <td>{{ p.size }}</td>
+        <td class="text-danger fw-bold">${{ '%.2f'|format(p.price) }}</td>
+        <td>
+          {% if p.in_stock %}
+            <span class="badge bg-success">Yes</span>
+          {% else %}
+            <span class="badge bg-secondary">No</span>
+          {% endif %}
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#editModal{{ p.id }}">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <form action="{{ url_for('admin_products_delete', product_id=p.id) }}" method="post" class="d-inline"
+            onsubmit="return confirm('Delete {{ p.name }}?')">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{ p.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">Edit Product</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('admin_products_edit', product_id=p.id) }}" method="post">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" name="name" class="form-control" value="{{ p.name }}" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Category</label>
+                  <select name="category" class="form-select" required>
+                    {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs'] %}
+                    <option value="{{ cat }}" {% if p.category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Size</label>
+                  <input type="text" name="size" class="form-control" value="{{ p.size }}">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Price ($)</label>
+                  <input type="number" name="price" class="form-control" step="0.01" value="{{ p.price }}" required>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="in_stock" id="stock{{ p.id }}"
+                    {% if p.in_stock %}checked{% endif %}>
+                  <label class="form-check-label" for="stock{{ p.id }}">In Stock</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Add New Product</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="{{ url_for('admin_products_add') }}" method="post">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. Pepsi" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select" required>
+              <option value="">-- Select --</option>
+              {% for cat in ['Pepsi Products','Coca-Cola Products','Beer','Packs'] %}
+              <option value="{{ cat }}">{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Size</label>
+            <input type="text" name="size" class="form-control" placeholder="e.g. 12oz Can">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Price ($)</label>
+            <input type="number" name="price" class="form-control" step="0.01" placeholder="1.99" required>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="in_stock" id="newStock" checked>
+            <label class="form-check-label" for="newStock">In Stock</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Add Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
